@@ -43,19 +43,76 @@ void crcularLL(ListNode* head) {
     temp->next = head;
 }
 
-void insertionAtk(ListNode* head, int k,int val) {
-    if (head == nullptr) return;
-
-  
-    int n = 1;
-    ListNode* temp = head;
-    while(n!=k && temp!=head){
-        n++;
-        temp=temp->next;
+ListNode* insertionAtk(ListNode* head, int k, int val) {
+    if (k <= 0) {
+        cout << "Invalid position" << endl;
+        return head;
     }
 
-    ListNode* newel = new ListNode(val);
-   
+    if (head == nullptr) {
+        if (k != 1) {
+            cout << "Invalid position" << endl;
+            return nullptr;
+        }
+
+        ListNode* newHead = new ListNode(val);
+        newHead->next = newHead;
+        return newHead;
+    }
+
+    int n = 1;
+    ListNode* tail = head;
+    while (tail->next != head) {
+        tail = tail->next;
+        n++;
+    }
+
+    if (k > n + 1) {
+        cout << "Invalid position" << endl;
+        return head;
+    }
+
+    ListNode* newNode = new ListNode(val);
+    if (k == 1) {
+        newNode->next = head;
+        tail->next = newNode;
+        return newNode;
+    }
+
+    ListNode* previous = head;
+    for (int i = 1; i < k - 1; i++) {
+        previous = previous->next;
+    }
+
+    newNode->next = previous->next;
+    previous->next = newNode;
+    return head;
+}
+
+void print(ListNode* head) {
+    if (head == nullptr) {
+        cout << "List is empty" << endl;
+        return;
+    }
+
+    ListNode* temp = head;
+    do {
+        cout << temp->val << " ";
+        temp = temp->next;
+    } while (temp != head);
+    cout << endl;
+}
+
+void deleteList(ListNode* head) {
+    if (head == nullptr) return;
+
+    ListNode* temp = head->next;
+    while (temp != head) {
+        ListNode* next = temp->next;
+        delete temp;
+        temp = next;
+    }
+    delete head;
 }
 
 int main() {
@@ -66,22 +123,17 @@ int main() {
     ListNode* head = inpt(n);
     crcularLL(head);
     int k;
-    cin>>k;
+    cout << "Enter position to insert (1-based): ";
+    cin >> k;
     int el;
     cout << "Enter the number to insert: ";
     cin >> el;
 
-    insertionAtk(head,k, el);
+    head = insertionAtk(head, k, el);
 
-    
-    ListNode* temp = head;
-    if (head != nullptr) {
-        do {
-            cout << temp->val << " ";
-            temp = temp->next;
-        } while (temp != head);
-        cout << endl;
-    }
+    cout << "List after insertion: ";
+    print(head);
 
+    deleteList(head);
     return 0;
 }

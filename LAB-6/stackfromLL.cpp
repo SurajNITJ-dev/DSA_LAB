@@ -58,6 +58,8 @@ int main() {
     stack st;
     st.push(7);
     st.push(9);
+    st.push(3);
+    st.push(1);
     cout << "Top element: " << st.top() << endl;
     cout << "Current size: " << st.siz() << endl;
     cout << "Popped: " << st.pop() << endl;

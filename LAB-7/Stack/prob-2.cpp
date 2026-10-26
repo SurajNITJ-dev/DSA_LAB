@@ -1,85 +1,86 @@
-#include <iostream>
-#include <string>
-#include <unordered_map>
-#include <algorithm>
-#include <climits>
-
+#include <bits/stdc++.h>
 using namespace std;
 
-string removeGroups(string board) {
-    bool foundGroup = true;
-    while (foundGroup) {
-        foundGroup = false;
-        int n = board.length();
-        for (int i = 0; i < n; ) {
-            int j = i;
-            while (j < n && board[j] == board[i]) {
-                j++;
-            }
-            if (j - i >= 3) {
-                board = board.substr(0, i) + board.substr(j);
-                foundGroup = true;
-                break;
-            } else {
+class Solution {
+public:
+   
+    string clean(string s) {
+        bool changed = true;
+        while (changed) {
+            changed = false;
+            int i = 0;
+            string res = "";
+            while (i < (int)s.size()) {
+                int j = i;
+                while (j < (int)s.size() && s[j] == s[i]) j++;
+                if (j - i >= 3) changed = true;     
+                else res += s.substr(i, j - i);      
                 i = j;
             }
+            s = res;
         }
+        return s;
     }
-    return board;
-}
 
-int dfs(string board, unordered_map<char, int>& handMap) {
-    board = removeGroups(board);
-    if (board.empty()) return 0;
+    int findMinStep(string board, string hand) {
+        sort(hand.begin(), hand.end());
 
-    int minBallsUsed = INT_MAX;
-    int n = board.length();
+        queue<pair<string, string> > q;       
+        set<pair<string, string> > visited;
 
-    for (int i = 0; i < n; i++) {
-        char c = board[i];
-        
-        int j = i;
-        while (j < n && board[j] == c) {
-            j++;
-        }
-        int count = j - i;
-        int needed = 3 - count;
+        q.push(make_pair(board, hand));
+        visited.insert(make_pair(board, hand));
 
-        if (handMap[c] >= needed) {
-            handMap[c] -= needed;
-            
-            string newBoard = board.substr(0, i) + string(needed, c) + board.substr(i + count);
-            int res = dfs(newBoard, handMap);
-            
-            if (res != -1) {
-                minBallsUsed = min(minBallsUsed, res + needed);
+        int steps = 0;
+        while (!q.empty()) {
+            int sz = q.size();
+            steps++;
+            while (sz--) {
+                string b = q.front().first;
+                string h = q.front().second;
+                q.pop();
+
+                for (int i = 0; i < (int)h.size(); i++) {
+                    if (i > 0 && h[i] == h[i - 1]) continue;  
+
+                    string newHand = h.substr(0, i) + h.substr(i + 1);
+
+                    for (int j = 0; j <= (int)b.size(); j++) {
+                       
+                        if (j > 0 && b[j - 1] == h[i]) continue;
+
+                        bool ok = false;
+                        if (j < (int)b.size() && b[j] == h[i]) ok = true;
+                        if (j > 0 && j < (int)b.size() && b[j - 1] == b[j] && b[j] != h[i]) ok = true;
+                        if (!ok) continue;
+
+                        string newBoard = clean(b.substr(0, j) + h[i] + b.substr(j));
+
+                        if (newBoard.empty()) return steps;
+
+                        if (!visited.count(make_pair(newBoard, newHand))) {
+                            visited.insert(make_pair(newBoard, newHand));
+                            q.push(make_pair(newBoard, newHand));
+                        }
+                    }
+                }
             }
-            
-            handMap[c] += needed;
         }
-
-        i = j - 1;
+        return -1;
     }
-
-    return (minBallsUsed == INT_MAX) ? -1 : minBallsUsed;
-}
-
-int findMinStep(string board, string hand) {
-    unordered_map<char, int> handMap;
-    for (char c : hand) {
-        handMap[c]++;
-    }
-    return dfs(board, handMap);
-}
+};
 
 int main() {
-    string board1 = "WWRRBBWW";
-    string hand1 = "WRBRW";
-    cout<< findMinStep(board1, hand1) << endl;
+    string board, hand;
 
-    string board2 = "WRRBBW";
-    string hand2 = "RB";
-    cout << findMinStep(board2, hand2) << endl;
+    cout << "Enter board: ";
+    cin >> board;
+    cout << "Enter hand: ";
+    cin >> hand;
+
+    Solution solver;
+    int ans = solver.findMinStep(board, hand);
+    cout << "Output: " << ans << "\n";
 
     return 0;
 }

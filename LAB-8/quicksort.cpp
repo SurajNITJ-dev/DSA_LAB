@@ -44,6 +44,7 @@ vector<int>QuickSort(vector<int>& v,int lo,int hi){
 
     int main(){
         int n;
+        cout<<"Enter numbers in array : ";
         cin>>n;
         vector<int>nums(n);
 
@@ -52,7 +53,7 @@ vector<int>QuickSort(vector<int>& v,int lo,int hi){
         }
 
         QuickSort(nums,0,n-1);
-
+        cout<<"Sorted using Quick Sort : ";
         for(int i=0;i<n;i++){
             cout<<nums[i]<<" ";
         }

@@ -53,7 +53,8 @@ void validParanthesiscount(const string& s) {
 
 int main() {
     string s;
-    cin >> s;
+    cout << "Enter a parentheses string: ";
+    getline(cin, s);
     validParanthesiscount(s);
     return 0;
 }

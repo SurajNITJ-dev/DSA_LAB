@@ -38,12 +38,14 @@ public:
 
 int main() {
     stack st;
+    st.push(3);
+    st.push(8);
     st.push(7);
-    st.push(6);
+
     cout << "Top element: " << st.top() << endl;
     cout << "Current size: " << st.siz() << endl;
     cout << "Popped: " << st.pop() << endl;
     cout << "Top element after pop: " << st.top() << endl;
-
+    cout << "size after pop: " << st.siz() << endl;
     return 0;
 }

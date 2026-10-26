@@ -45,12 +45,30 @@ void CmpMerg(vector<int>& v, int lo, int mid, int hi, vector<int>& temp){
     }
 
     vector<int> sortArray(vector<int>& nums) {
-        ios_base::sync_with_stdio(false);
-        cin.tie(NULL);
-
+     
         int n = nums.size();
         vector<int> temp(n); 
         MergSort(nums, 0, n - 1, temp);
 
         return nums;  
+    }
+
+int main(){
+        int n;
+        cout<<"Enter size of array : ";
+        cin>>n;
+        vector<int>nums(n);
+        cout<<"Enter numbers in array : ";
+        for(int i=0;i<n;i++){
+            cin>>nums[i];
+        }
+
+        vector<int> temp(n); 
+        MergSort(nums, 0, n - 1, temp);
+
+        cout<<"Sorted using Merge Sort : ";
+        for(int i=0;i<n;i++){
+            cout<<nums[i]<<" ";
+        }
+        
     }
