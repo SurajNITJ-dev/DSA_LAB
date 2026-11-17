@@ -1,0 +1,7 @@
+{
+  "code-runner.executorMap": {
+    "c": "Set-Location -LiteralPath $dir; if ($?) { gcc \"$fileName\" -o \"$fileNameWithoutExt.exe\" }; if ($?) { & \".\\$fileNameWithoutExt.exe\" }",
+    "cpp": "Set-Location -LiteralPath $dir; if ($?) { g++ \"$fileName\" -o \"$fileNameWithoutExt.exe\" }; if ($?) { & \".\\$fileNameWithoutExt.exe\" }"
+  },
+  "C_Cpp.errorSquiggles": "disabled"
+}
